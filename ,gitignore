@@ -1,0 +1,25 @@
+# Archivos generados por Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Entorno virtual
+venv/
+.venv/
+
+# Archivos de configuración específicos del entorno
+.env
+
+# Archivos temporales y de caché
+*.log
+*.tmp
+*.swp
+
+# Archivos generados por el IDE o editor de texto
+.idea/
+.vscode/
+*.sublime-workspace
+
+# Archivos específicos de sistemas operativos
+Thumbs.db
+.DS_Store
