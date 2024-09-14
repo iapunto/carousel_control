@@ -1,12 +1,4 @@
-"""
-Funciones de utilidad para el proyecto de control de carrusel.
-
-Autor: IA Punto: Soluciones Integrales de Tecnología y Marketing
-Proyecto para: INDUSTRIAS PICO S.A.S
-Dirección: MEng. Sergio Lankaster Rondón Melo
-Colaboración: Ing. Francisco Garnica
-Fecha de creación: 2024-09-14
-"""
+# utils.py
 
 ESTADOS_PLC = {
     0: {
@@ -51,23 +43,24 @@ ESTADOS_PLC = {
     }
 }
 
-"""
-  Interpreta el código de estado del PLC y devuelve un diccionario con los estados y sus descripciones.
-
-  Args:
-      status_code: El código de estado del PLC en formato entero (8 bits).
-
-  Returns:
-      Un diccionario donde las claves son los nombres de los estados y los valores son sus descripciones.
-"""
 def interpretar_estado_plc(status_code):
+    """
+    Interpreta el código de estado del PLC y devuelve un diccionario con los estados y sus descripciones.
 
-  estado_binario = format(status_code, '08b')
-  estados_activos = {}
+    Args:
+        status_code: El código de estado del PLC en formato entero (8 bits).
 
-  for i, bit in enumerate(estado_binario):
-      bit_value = int(bit)
-      estado = ESTADOS_PLC[i]
-      estados_activos[estado['nombre']] = estado[bit_value]
+    Returns:
+        Un diccionario donde las claves son los nombres de los estados y los valores son sus descripciones.
+    """
 
-  return estados_activos
+    estado_binario = format(status_code, '08b')
+    estados_activos = {}
+
+    # Iterar sobre los bits de derecha a izquierda (LSB a MSB)
+    for i in range(8):  
+        bit_value = (status_code >> i) & 1  # Extraer el valor del bit i
+        estado = ESTADOS_PLC[i]
+        estados_activos[estado['nombre']] = estado[bit_value]
+
+    return estados_activos

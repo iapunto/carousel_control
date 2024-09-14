@@ -1,13 +1,3 @@
-"""
-Clase PLC para SIMULAR la comunicación con el PLC Delta AS Series a través de sockets.
-
-Autor: IA Punto: Soluciones Integrales de Tecnología y Marketing
-Proyecto para: INDUSTRIAS PICO S.A.S
-Dirección: MEng. Sergio Lankaster Rondón Melo
-Colaboración: Ing. Francisco Garnica
-Fecha de creación: 2024-09-14
-"""
-
 import time
 import random
 
@@ -15,7 +5,11 @@ class PLCSimulator:
     def __init__(self, ip, port):
         self.ip = ip
         self.port = port
-        self.current_position = random.randint(1,10)  # Posición inicial del carrusel
+        self.current_position = random.randint(0, 9) 
+        self.is_running = False  # Estado inicial: detenido
+        self.status_code = 0  # Initialize status_code to a default value
+
+    # ... (resto del código)
 
     def connect(self):
         print("Simulando conexión con el PLC...")
@@ -26,23 +20,31 @@ class PLCSimulator:
 
     def send_command_and_receive_response(self, command):
         print(f"Comando recibido en el simulador: {command}")
-        time.sleep(1)  # Simula un pequeño retraso en la respuesta
+        time.sleep(1)
 
-        # Lógica para simular la respuesta del PLC
         if command == "STATUS":
-            return {'status_code': 1, 'position': self.current_position}
+            return {'status_code': self.status_code, 'position': self.current_position}
+
         elif command.startswith("MUEVETE"):
             try:
-                _, target_position = command.split()  # Separa el comando y el argumento
+                _, target_position = command.split()
                 target_position = int(target_position)
-                
+
                 # Simula el movimiento del carrusel
-                print(f"Moviendo el carrusel a la posición {target_position}...")
-                time.sleep(2)  # Simula el tiempo de movimiento
-                self.current_position = target_position
-                
-                return {'status_code': 1, 'position': self.current_position}
+                if not self.is_running:  # Solo se mueve si no está ya en movimiento
+                    self.is_running = True
+                    self.current_status |= 0b00000010  # Enciende el bit 1 (RUN)
+                    print(f"Moviendo el carrusel a la posición {target_position}...")
+                    time.sleep(2)
+                    self.current_position = target_position
+                    self.is_running = False
+                    self.current_status &= 0b11111101  # Apaga el bit 1 (RUN)
+
+                return {'status_code': self.current_status, 'position': self.current_position}
             except ValueError:
                 return "Error: Argumento inválido para el comando MUEVETE"
+
         else:
-            return {'status_code': 0, 'position': self.current_position}  # Comando no reconocido
+            # Genera un nuevo estado aleatorio para cualquier otro comando
+            self.status_code = random.randint(0, 255) 
+            return {'status_code': self.status_code, 'position': self.current_position}

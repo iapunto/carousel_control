@@ -29,7 +29,7 @@ def main():
     controller = CarouselController(plc)
 
     # Ejemplo de uso: envía un comando simple y espera la respuesta
-    controller.send_command(6,0)
+    controller.send_command(6,1)
 
 if __name__ == "__main__":
     main()
