@@ -1,3 +1,15 @@
+"""
+Clase PLC para la comunicación con el PLC Delta AS Series a través de sockets.
+
+Autor: IA Punto: Soluciones Integrales de Tecnología y Marketing
+Proyecto para: INDUSTRIAS PICO S.A.S
+Dirección: MEng. Sergio Lankaster Rondón Melo
+Colaboración: Ing. Francisco Garnica
+Fecha de creación: 2024-09-13
+"""
+
+# ... (resto del código)
+
 import socket
 import struct
 
