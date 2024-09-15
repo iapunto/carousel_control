@@ -19,6 +19,7 @@ import time
 from models.plc_simulator import PLCSimulator
 from controllers.carousel_controller import CarouselController
 
+
 def main():
     load_dotenv()
 
@@ -29,7 +30,8 @@ def main():
     controller = CarouselController(plc)
 
     # Ejemplo de uso: envía un comando simple y espera la respuesta
-    controller.send_command(6,1)
+    controller.send_command(1, 9)
+
 
 if __name__ == "__main__":
     main()
