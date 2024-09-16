@@ -1,15 +1,24 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, Button, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, Button, TextInput, Alert } from 'react-native';
 import axios from 'axios';
+
+const API_BASE_URL = 'http://127.0..1:5000'; // Reemplaza con la URL real de tu API
 
 const App = () => {
   const [status, setStatus] = useState('Estado del PLC: Desconocido');
   const [position, setPosition] = useState('Posición: Desconocida');
   const [bucketInput, setBucketInput] = useState('');
 
+  useEffect(() => {
+    // Actualiza el estado al inicio y cada 5 segundos
+    fetchStatus();
+    const intervalId = setInterval(fetchStatus, 5000); 
+    return () => clearInterval(intervalId); // Limpia el intervalo al desmontar el componente
+  }, []);
+
   const fetchStatus = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1/status');
+      const response = await axios.get(`${API_BASE_URL}/status`);
       setStatus(`Estado del PLC: ${response.data.status_code}`);
       setPosition(`Posición: ${response.data.position}`);
     } catch (error) {
@@ -20,14 +29,19 @@ const App = () => {
 
   const sendCommand = async () => {
     try {
-      await axios.post('http://127.0.0.1/command', {
+      const response = await axios.post(`${API_BASE_URL}/command`, {
         command: 1, // Comando MUEVETE
         argument: bucketInput,
       });
-      // Puedes actualizar el estado o mostrar un mensaje de éxito aquí
+      if (response.status === 200) {
+        Alert.alert('Éxito', 'Comando enviado exitosamente');
+        // Puedes actualizar el estado o realizar otras acciones aquí
+      } else {
+        Alert.alert('Error', 'Hubo un error al enviar el comando');
+      }
     } catch (error) {
       console.error('Error al enviar el comando:', error);
-      // Puedes mostrar un mensaje de error aquí
+      Alert.alert('Error', 'Hubo un error al enviar el comando');
     }
   };
 
@@ -42,6 +56,7 @@ const App = () => {
         placeholder="Número de cangilón"
         onChangeText={setBucketInput}
         value={bucketInput}
+        keyboardType="numeric" // Solo permite ingresar números
       />
       <Button title="Mover" onPress={sendCommand} />
 
