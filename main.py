@@ -18,6 +18,7 @@ import time
 
 from models.plc_simulator import PLCSimulator
 from controllers.carousel_controller import CarouselController
+from views.user_interface import CarouselControlGUI
 
 
 def main():
@@ -31,6 +32,8 @@ def main():
 
     # Ejemplo de uso: envía un comando simple y espera la respuesta
     controller.send_command(1, 9)
+
+    gui = CarouselControlGUI(controller)
 
 
 if __name__ == "__main__":
