@@ -23,3 +23,31 @@ venv/
 # Archivos específicos de sistemas operativos
 Thumbs.db
 .DS_Store
+
+# Archivos generados por Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Archivos de construcción de React Native
+.expo/
+dist/
+
+# Archivos específicos de sistemas operativos
+Thumbs.db
+.DS_Store
+
+# Archivos específicos de plataformas móviles
+# iOS
+ios/build/
+*.pbxuser
+!default.pbxuser
+xcuserdata/
+
+# Android
+android/app/build/
+android/gradle/build/
+android/.gradle/
+android/local.properties
