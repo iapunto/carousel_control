@@ -13,8 +13,8 @@ ESTADOS_PLC = {
     },
     2: {
         'nombre': 'MODO_OPERACION',
-        0: 'Manual',
-        1: 'Automático'
+        0: 'Remoto',
+        1: 'Manual'
     },
     3: {
         'nombre': 'ALARMA',
@@ -28,8 +28,8 @@ ESTADOS_PLC = {
     },
     5: {
         'nombre': 'VFD',
-        0: 'Error en el variador de velocidad',
-        1: 'El variador de velocidad está OK'
+        0: 'El variador de velocidad está OK',
+        1: 'Error en el variador de velocidad'
     },
     6: {
         'nombre': 'ERROR_POSICIONAMIENTO',
