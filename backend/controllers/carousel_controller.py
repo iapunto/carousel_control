@@ -79,7 +79,73 @@ class CarouselController:
             self.plc.close()
         else:
             print("No se pudo conectar al PLC. Verifica la configuración.")
+    
+    # def send_command(self, command, argument=None, home=None, reset=None, stop=None):
+    #     if self.plc.connect():
+    #         # Envía el comando 0 (STATUS) para obtener el estado actual
+    #         self.plc.send_command(0)
+    #         time.sleep(0.2)
 
+    #         # Lee el estado del PLC
+    #         response = self.plc.receive_response()
+
+    #         if response:
+    #             # ... (impresión de estado y posición)
+
+    #             # Verifica si el PLC está en el estado adecuado para moverse
+    #             if self.is_plc_ready_to_move(response['status_code']):
+    #                 if command == 1:  # Comando MUEVETE
+    #                     try:
+    #                         target_position = int(argument)
+    #                         if 0 <= target_position <= 9:
+    #                             # Envía el comando de movimiento y luego el argumento
+    #                             full_command = bytes([command, target_position])
+    #                             self.plc.send_command(full_command)
+    #                             time.sleep(0.5)
+
+    #                             # Recibe la respuesta al comando MUEVETE (si es necesario)
+    #                             move_response = self.plc.receive_response()
+    #                             if move_response:
+    #                                 print(f"Respuesta al comando MUEVETE: {move_response}")
+
+    #                         else:
+    #                             print("Error: Número de bucket inválido.")
+    #                     except ValueError:
+    #                         print("Error: Argumento inválido para el comando MUEVETE.")
+
+    #                 # Manejo de otros comandos
+    #                 else:
+    #                     command_encode = bytes(command)
+    #                     home_encode = bytes(home)
+    #                     reset_encode = bytes(reset)
+    #                     stop_encode = bytes(stop)
+    #                     # Envía el comando principal
+    #                     self.plc.send_command(command_encode)
+
+    #                     # Envía los argumentos adicionales si están presentes
+    #                     if home is not None:
+    #                         time.sleep(0.5)
+    #                         self.plc.send_command(home_encode)
+    #                     if reset is not None:
+    #                         time.sleep(0.5)
+    #                         self.plc.send_command(reset_encode)
+    #                     if stop is not None:
+    #                         time.sleep(0.5)
+    #                         self.plc.send_command(stop_encode)
+
+    #                     # Recibe la respuesta al comando (si es necesario)
+    #                     response = self.plc.receive_response()
+    #                     if response:
+    #                         print(f"Respuesta al comando {command}: {response}")
+    #                     else:
+    #                         print(f"No se recibió respuesta al comando {command}.")
+
+    #             else:
+    #                 print("El PLC no está en el estado adecuado para moverse.")
+
+    #         self.plc.close()
+    #     else:
+    #         print("No se pudo conectar al PLC. Verifica la configuración.")
 
     def monitor_plc_status(self):
         """
