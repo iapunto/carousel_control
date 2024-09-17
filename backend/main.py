@@ -18,7 +18,6 @@ import os
 
 from models.plc import PLC
 from controllers.carousel_controller import CarouselController
-from views.user_interface import CarouselControlGUI
 
 def main():
     """Función principal del programa."""
@@ -33,8 +32,6 @@ def main():
 
     # Crea la interfaz gráfica y pásale el controlador
     #
-    # gui = CarouselControlGUI(controller)
-
     # Inicia el monitoreo del estado del PLC en segundo plano (si es necesario)
     # controller.monitor_plc_status()  # Descomenta esta línea si necesitas monitoreo continuo
     controller.send_command(1,2)
