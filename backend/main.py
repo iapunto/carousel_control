@@ -34,7 +34,7 @@ def main():
     #
     # Inicia el monitoreo del estado del PLC en segundo plano (si es necesario)
     # controller.monitor_plc_status()  # Descomenta esta línea si necesitas monitoreo continuo
-    controller.send_command(1,2)
+    controller.send_command(1,4)
     
 if __name__ == "__main__":
     
