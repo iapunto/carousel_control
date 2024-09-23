@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Button, TextInput, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, Text, Button, TextInput, TouchableHighlight, TouchableOpacity, Image } from 'react-native';
 
 const HomeScreen = () => {
   const [bucketInput, setBucketInput] = useState('0');
 
   const incrementBucket = () => {
-    const newBucket = Math.min(parseInt(bucketInput) + 1, 10); 
+    const newBucket = Math.min(parseInt(bucketInput) + 1, 10);
     setBucketInput(newBucket.toString());
   };
 
   const decrementBucket = () => {
-    const newBucket = Math.max(parseInt(bucketInput) - 1, 0); 
+    const newBucket = Math.max(parseInt(bucketInput) - 1, 1);
     setBucketInput(newBucket.toString());
   };
 
@@ -23,7 +23,7 @@ const HomeScreen = () => {
       </View>
       <View style={styles.container}>
         { /* logo de la empresa */ }
-        <Image 
+        <Image
             source={require('./assets/logo.png')} // Reemplaza con la ruta a tu logo
             style={styles.logo}
         />
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   arrowButton: {
-    backgroundColor: 'blue',
+    backgroundColor: 'red',
     width: 80,
     height: 80,
     borderRadius: 10,
