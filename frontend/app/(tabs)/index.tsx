@@ -74,7 +74,7 @@ const HomeScreen = () => {
 
   const sendCommand = async (command: number, argument?: number) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/command`, {
+      const response = await axios.post(`${API_BASE_URL}/v1/command`, {
         command,
         argument,
       });
@@ -112,7 +112,7 @@ const HomeScreen = () => {
         bucketNumber={bucketInput} 
         setBucketNumber={setBucketNumber} 
         onIniciar={() => sendCommand(1, parseInt(bucketInput))} 
-        onHome={() => sendCommand(2)} 
+        onHome={() => sendCommand(4)} 
       />
 
       <PLCStatus status={status} />
@@ -124,9 +124,8 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#3c3c3c',
+    backgroundColor: '#6c6c6c',
     alignItems: 'center',
-    justifyContent: 'center',
     padding: 20,
   },
 });

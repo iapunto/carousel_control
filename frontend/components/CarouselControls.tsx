@@ -22,15 +22,11 @@ const CarouselControls: React.FC<CarouselControlsProps> = ({ bucketNumber, setBu
   };
 
   return (
-    <View className="flex flex-row justify-around w-full mb-6">
-      <View className="flex flex-col items-center">
-        <Button title="Iniciar" onPress={onIniciar} />
-        <Button title="Home" onPress={onHome} />
-      </View>
+    <View className="flex flex-col w-full items-center">
 
-      <View className="flex flex-col items-center">
+      <View className="flex flex-row items-center mb-6">
         <TextInput
-          className="h-16 border border-gray-400 px-4 w-48 text-center text-3xl mr-4"
+          className="h-40 w-40 border border-gray-400 px-4 w-48 text-center text-8xl mr-4"
           value={bucketNumber}
           onChangeText={setBucketNumber}
           keyboardType="numeric"
@@ -39,13 +35,22 @@ const CarouselControls: React.FC<CarouselControlsProps> = ({ bucketNumber, setBu
         />
 
         <View className="flex flex-col mt-4">
-          <TouchableOpacity className="bg-blue-500 w-20 h-20 rounded-lg justify-center items-center" onPress={incrementBucket}>
+          <TouchableOpacity className="bg-red-500 w-20 h-20 rounded-lg justify-center items-center mb-2" onPress={incrementBucket}>
             <Icon name="caret-up" size={24} color="white" />
           </TouchableOpacity>
-          <TouchableOpacity className="bg-blue-500 w-20 h-20 rounded-lg justify-center items-center mt-2" onPress={decrementBucket}>
+          <TouchableOpacity className="bg-red-500 w-20 h-20 rounded-lg justify-center items-center" onPress={decrementBucket}>
             <Icon name="caret-down" size={24} color="white" />
           </TouchableOpacity>
         </View>
+      </View>
+
+      <View className="flex flex-row items-center mb-6">
+        <TouchableOpacity className="bg-red-700 py-3 px-9 rounded-md mb-2" onPress={onIniciar}>
+          <Text className="text-white font-bold">Iniciar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity className="bg-red-700 py-3 px-9 rounded-md mb-2 ml-2" onPress={onHome}>
+          <Text className="text-white font-bold">Home</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

@@ -17,25 +17,27 @@ const StatusIndicators: React.FC = () => {
   }, []);
 
   return (
-    <View className="flex flex-row top-0 justify-between items-center w-full p-4 bg-red-800"> 
-      <Icon
-        name={showAlert ? "exclamation-triangle" : 'check-circle'}
-        size={24}
-        color={showAlert ? 'red' : 'green'}
-        style={styles.icon}
-      />
+    <View className="aspect-auto container mx-auto bg-slate-950" style={styles.container}>
+      <View className="flex flex-row top-0 justify-between items-center w-full p-4"> 
+        <Icon
+          name={showAlert ? "exclamation-triangle" : 'check-circle'}
+          size={24}
+          color={showAlert ? 'red' : 'green'}
+          style={styles.icon}
+        />
 
-      <View className="text-center">
-        <Image 
-          source={require('../assets/logo-w.png')}
-          style={{ width: 250, height: 100, resizeMode: 'contain' }} />
+        <View className="text-center">
+          <Image 
+            source={require('../assets/logo-negativo.png')}
+            style={{ width: 250, height: 100, resizeMode: 'contain' }} />
+        </View>
+        <Icon 
+          name={'server'} 
+          size={24} 
+          color={isConnected ? 'green' : 'red'} 
+          style={styles.icon}
+        />
       </View>
-      <Icon 
-        name={'server'} 
-        size={24} 
-        color={isConnected ? 'green' : 'red'} 
-        style={styles.icon}
-      />
     </View>
   )
 }
@@ -44,6 +46,13 @@ const styles = StyleSheet.create({
   icon: {
     alignSelf: 'flex-start', // Alinea los iconos a la izquierda/derecha según su posición
   },
+  container: {
+    width: '100%',
+    height: 'auto',
+    position: 'relative',
+    marginTop: -20,
+    padding: -10,
+  }
 });
 
 export default StatusIndicators;

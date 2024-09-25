@@ -9,7 +9,7 @@ const PLCStatus: React.FC<PLCStatusProps> = ({ status }) => {
   return (
     <View style={styles.statusContainer}>
       <Text style={styles.statusTitle}>Estado del PLC:</Text>
-      <Text>{status}</Text> 
+      <Text className="text-white">{status}</Text> 
     </View>
   );
 };
