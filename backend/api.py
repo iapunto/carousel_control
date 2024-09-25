@@ -1,5 +1,7 @@
 from flask import Flask, jsonify, request
-from models.plc import PLC
+from flask_cors import CORS
+from flask_cors import cross_origin
+from models.plc_simulator import PLCSimulator
 from models.inventory import Inventory
 from controllers.carousel_controller import CarouselController
 from controllers.inventory_controller import InventoryController
@@ -7,14 +9,15 @@ from controllers.brand_controller import BrandController
 from controllers.category_controller import CategoryController
 from dotenv import load_dotenv
 import os
+import time
 
 load_dotenv()
 
 plc_ip = os.getenv('PLC_IP')
 plc_port = int(os.getenv('PLC_PORT'))
 
-# O plc = PLC(plc_ip, plc_port) si usas el PLC real
-plc = PLC(plc_ip, plc_port)
+# Crear instancias de PLC y controlador 
+plc = PLCSimulator(plc_ip, plc_port) # plc = PLC(plc_ip, plc_port) si usas el PLC real O plc_simulator = PLCSimulator(plc_ip, plc_port) si usas el Simulador PLC
 carousel_controller = CarouselController(plc)
 
 # Crear instancias de los controladores de inventario, marcas y categorías
@@ -24,20 +27,84 @@ brand_controller = BrandController()
 category_controller = CategoryController()
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*" }})   # Enable CORS for all routes
 
+@app.route('/v1/command', methods=['POST'])
+@cross_origin()
+def send_command():
+    """
+    Envía un comando al PLC.
 
-@app.route('/status', methods=['GET'])
+    POST:
+        Envía un comando al PLC.
+        Datos esperados en el cuerpo de la solicitud (JSON):
+            - command: Número entero que representa el comando a enviar (0-255).
+            - argument: Número entero que representa el argumento del comando (opcional, 0-255).
+    Respuestas:
+        - 200 OK: Mensaje de éxito en formato JSON.
+        - 400 Bad Request: Si faltan datos requeridos, los datos son inválidos o el PLC no está en el estado adecuado.
+        - 500 Internal Server Error: Si ocurre un error al comunicarse con el PLC.
+    """
+
+    if plc.connect():
+        try:
+            data = request.get_json()
+            command = data.get('command')
+            argument = data.get('argument')
+
+            if command is not None:
+                # Verificar si el comando es válido
+                if not isinstance(command, int) or command < 0 or command > 255:
+                    return jsonify({'error': 'Comando inválido'}), 400
+
+                if argument is not None:
+                    # Verificar si el argumento es válido
+                    if not isinstance(argument, int) or argument < 0 or argument > 255:
+                        return jsonify({'error': 'Argumento inválido'}), 400
+
+                # Enviar el comando y el argumento al PLC
+                carousel_controller.send_command(command, argument)
+
+                return jsonify({'message': 'Comando enviado exitosamente'}), 200
+            else:
+                return jsonify({'error': 'Comando no especificado'}), 400
+        except Exception as e:
+            return jsonify({'error': f'Error al comunicarse con el PLC: {e}'}), 500
+    else:
+        return jsonify({'error': 'No se pudo conectar al PLC'}), 500
+
+@app.route('/v1/status', methods=['GET'])
+@cross_origin()
 def get_status():
     """
     Obtiene el estado y la posición actual del PLC.
+
+    GET:
+        Obtiene el estado y la posición actual del PLC.
+    Respuestas:
+        - 200 OK: Diccionario con el código de estado ('status_code') y la posición ('position') del PLC en formato JSON.
+        - 500 Internal Server Error: Si ocurre un error al comunicarse con el PLC.
     """
+    
+    # Imprime la URL de origen de la solicitud
+    # print(f"Solicitud recibida desde: {request.headers.get('Origin')}")
+
     if plc.connect():
-        response = plc.send_command_and_receive_response(0)  # Envía 0 para obtener el estado
-        plc.close()
-        if response:
-            return jsonify(response)
-        else:
-            return jsonify({'error': 'No se pudo obtener el estado del PLC'}), 500
+        try:
+            # Envía el comando 0 (STATUS) para obtener el estado actual
+            plc.send_command(0)
+            time.sleep(0.5)  # Espera para que el PLC procese el comando y envíe la respuesta
+
+            # Lee el estado y la posición del PLC
+            response = plc.receive_response()
+
+            if response:
+                return jsonify(response), 200
+            else:
+                return jsonify({'error': 'No se pudo obtener el estado del PLC'}), 500
+        except Exception as e:
+            return jsonify({'error': f'Error al comunicarse con el PLC: {e}'}), 500
+
     else:
         return jsonify({'error': 'No se pudo conectar al PLC'}), 500
 

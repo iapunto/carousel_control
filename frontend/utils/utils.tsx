@@ -1,16 +1,16 @@
 // Definir una interfaz para representar la estructura de ESTADOS_PLC
 interface EstadoPLC {
-  nombre: string;
-  0: string;
-  1: string;
-}
-
-// Definir un tipo para el diccionario de estados
-type EstadosPLCDictionary = {
-  [key in 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7]: EstadoPLC; 
-}
-
-export const ESTADOS_PLC: EstadosPLCDictionary = {
+    nombre: string;
+    0: string;
+    1: string;
+  }
+  
+  // Definir un tipo para el diccionario de estados
+  type EstadosPLCDictionary = {
+    [key in 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7]: EstadoPLC; 
+  }
+  
+  export const ESTADOS_PLC: EstadosPLCDictionary = {
     0: {
       nombre: 'READY',
       0: 'El equipo no puede operar',
@@ -23,8 +23,8 @@ export const ESTADOS_PLC: EstadosPLCDictionary = {
     },
     2: {
       nombre: 'MODO_OPERACION',
-      0: 'Manual',
-      1: 'Automático'
+      0: 'Remoto',
+      1: 'Manual'
     },
     3: {
       nombre: 'ALARMA',
@@ -38,8 +38,8 @@ export const ESTADOS_PLC: EstadosPLCDictionary = {
     },
     5: {
       nombre: 'VFD',
-      0: 'Error en el variador de velocidad',
-      1: 'El variador de velocidad está OK'
+      0: 'El variador de velocidad está OK',
+      1: 'Error en el variador de velocidad'
     },
     6: {
       nombre: 'ERROR_POSICIONAMIENTO',
@@ -54,14 +54,13 @@ export const ESTADOS_PLC: EstadosPLCDictionary = {
   };
   
   export function interpretarEstadoPLC(statusCode: number): { [key: string]: string } {
-    const estadoBinario = statusCode.toString(2).padStart(8, '0'); // Convertir a binario de 8 bits
+    const estadoBinario = statusCode.toString(2).padStart(8, '0'); 
     const estadosActivos: { [key: string]: string } = {};
   
-    // Iterar sobre los bits de derecha a izquierda (LSB a MSB)
     for (let i = 0; i < 8; i++) {
-      const bitValue = (statusCode >> i) & 1; // Extraer el valor del bit i
-      const estado = ESTADOS_PLC[i];
-      estadosActivos[estado.nombre] = estado[bitValue];
+      const bitValue = (statusCode >> i) & 1; 
+      const estado = ESTADOS_PLC[i]; 
+      estadosActivos[estado.nombre] = estado[bitValue]; 
     }
   
     return estadosActivos;

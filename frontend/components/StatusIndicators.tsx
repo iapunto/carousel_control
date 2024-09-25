@@ -1,34 +1,48 @@
-import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Image, StyleSheet } from 'react-native';
+import Icon from '@expo/vector-icons/FontAwesome';
 
-interface StatusIndicatorsProps {
-  isConnected: boolean;
-  showAlert: boolean;
+const StatusIndicators: React.FC = () => {
+  const [isConnected, setIsConnected] = useState(true); // Estado inicial: conectado
+  const [showAlert, setShowAlert] = useState(true);   // Estado inicial: sin alerta
+
+  useEffect(() => {
+    // Simula cambios de estado cada cierto tiempo (puedes ajustar el intervalo)
+    const intervalId = setInterval(() => {
+      setIsConnected(Math.random() < 0.8); // 80% de probabilidad de estar conectado
+      setShowAlert(Math.random() < 0.2);   // 20% de probabilidad de mostrar una alerta
+    }, 5000);
+
+    return () => clearInterval(intervalId); // Limpia el intervalo al desmontar el componente
+  }, []);
+
+  return (
+    <View className="flex flex-row top-0 justify-between items-center w-full p-4 bg-red-800"> 
+      <Icon
+        name={showAlert ? "exclamation-triangle" : 'check-circle'}
+        size={24}
+        color={showAlert ? 'red' : 'green'}
+        style={styles.icon}
+      />
+
+      <View className="text-center">
+        <Image 
+          source={require('../assets/logo-w.png')}
+          style={{ width: 250, height: 100, resizeMode: 'contain' }} />
+      </View>
+      <Icon 
+        name={'server'} 
+        size={24} 
+        color={isConnected ? 'green' : 'red'} 
+        style={styles.icon}
+      />
+    </View>
+  )
 }
 
-const StatusIndicators: React.FC<StatusIndicatorsProps> = ({ isConnected, showAlert }) => {
-  return (
-    <View style={styles.container}>
-      <Image source={require('../assets/connect_icon.png')} style={[styles.icon, !isConnected && styles.disconnected]} /> 
-      {showAlert && <Image source={require('../assets/alert_icon.png')} style={styles.icon} />}
-    </View>
-  );
-};
-
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    width: '80%',
-    marginBottom: 30,
-  },
   icon: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-  },
-  disconnected: {
-    tintColor: 'red', // Cambia el color del icono de conexión si está desconectado
+    alignSelf: 'flex-start', // Alinea los iconos a la izquierda/derecha según su posición
   },
 });
 

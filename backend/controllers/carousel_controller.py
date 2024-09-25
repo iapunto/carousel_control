@@ -9,7 +9,8 @@ Fecha de creación: 2023-09-13
 Última modificación: 2024-09-16
 """
 
-from models.plc import PLC
+# from models.plc import PLC
+from models.plc_simulator import PLCSimulator
 from commons.utils import interpretar_estado_plc
 import time
 import importlib
@@ -33,6 +34,7 @@ class CarouselController:
 
             # Lee el estado del PLC
             response = self.plc.receive_response()
+            time.sleep(0.2)
 
             if response:
                 # Interpreta y muestra el estado del PLC
@@ -40,7 +42,7 @@ class CarouselController:
 
                 # Muestra la posición del carrusel
                 print(f"Posición actual del carrusel: {response['position']}")
-
+                
                 # Verifica si el PLC está en el estado adecuado para moverse
                 if self.is_plc_ready_to_move(response['status_code']):
                     if command == 1:  # Comando MUEVETE
@@ -76,9 +78,11 @@ class CarouselController:
                 else:
                     print("El PLC no está en el estado adecuado para moverse.")
 
-            self.plc.close()
         else:
             print("No se pudo conectar al PLC. Verifica la configuración.")
+    
+    def close_connection(self):
+        self.plc.close() 
     
     # def send_command(self, command, argument=None, home=None, reset=None, stop=None):
     #     if self.plc.connect():
@@ -171,8 +175,6 @@ class CarouselController:
             except KeyboardInterrupt:
                 print("Monitoreo detenido por el usuario.")
 
-            finally:
-                self.plc.close()
         else:
             print("No se pudo conectar al PLC. Verifica la configuración.")
 

@@ -16,7 +16,8 @@ Fecha de creación: 2023-09-13
 from dotenv import load_dotenv
 import os
 
-from models.plc import PLC
+#from models.plc import PLC  # Comenta o elimina esta línea
+from models.plc_simulator import PLCSimulator  # Agrega esta línea
 from controllers.carousel_controller import CarouselController
 
 def main():
@@ -27,7 +28,8 @@ def main():
     plc_ip = os.getenv('PLC_IP')
     plc_port = int(os.getenv('PLC_PORT'))
 
-    plc = PLC(plc_ip, plc_port)
+    # plc = PLC(plc_ip, plc_port)
+    plc = PLCSimulator(plc_ip, plc_port)
     controller = CarouselController(plc)
 
     # Crea la interfaz gráfica y pásale el controlador

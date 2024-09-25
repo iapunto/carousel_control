@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 interface PLCStatusProps {
   status: string;
@@ -7,7 +7,7 @@ interface PLCStatusProps {
 
 const PLCStatus: React.FC<PLCStatusProps> = ({ status }) => {
   return (
-    <View style={styles.container}>
+    <View style={styles.statusContainer}>
       <Text style={styles.statusTitle}>Estado del PLC:</Text>
       <Text>{status}</Text> 
     </View>
@@ -15,7 +15,7 @@ const PLCStatus: React.FC<PLCStatusProps> = ({ status }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  statusContainer: {
     marginBottom: 10,
   },
   statusTitle: {
